@@ -1,0 +1,33 @@
+services:
+  wan2gp:
+    image: wan2gp-nvidia-50x
+    container_name: wan2gp 
+    restart: no 
+    build: .
+    # command: tail -f /dev/null
+    deploy:
+        resources:
+          reservations:
+            devices:
+              - driver: nvidia
+                count: all
+                capabilities: [ gpu ]  
+    runtime: nvidia
+    devices:
+      - /dev/dri:/dev/dri 
+      - /dev/snd:/dev/snd
+    ports:
+      - 7860:7860
+    volumes:  
+      - /run/user/1000/pipewire-0:/tmp/pipewire-0
+      - /data/lora-i2v:/app/lora-i2v
+      - /data/lora:/app/lora
+      - /data/loras_hunyuan:/app/loras_hunyuan
+      - /data/loras_hunyuan_i2v:/app/loras_hunyuan_i2v
+      - /data/loras_ltxv:/app/loras_ltxv
+      - /data/ckpts:/app/ckpts 
+
+    logging:
+      options:
+        max-size: 10m
+ 
